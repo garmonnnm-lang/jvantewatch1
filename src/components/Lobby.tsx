@@ -52,6 +52,7 @@ interface LobbyProps {
   defaultUsername: string | null;
   defaultAvatar: string | null;
   onOpenSidebar?: () => void;
+  hasUnreadMessages?: boolean;
 }
 
 const fileToAvatarDataUrl = (file: File): Promise<string> => {
@@ -108,7 +109,7 @@ const getStablePing = (uid: string) => {
   return Math.abs(hash % 45) + 12;
 };
 
-export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvatar, onOpenSidebar }: LobbyProps) {
+export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvatar, onOpenSidebar, hasUnreadMessages }: LobbyProps) {
   const [username, setUsername] = useState(user?.username || defaultUsername || '');
   const [avatar, setAvatar] = useState(user?.avatar || defaultAvatar || '');
   const [description, setDescription] = useState(user?.description || '');
@@ -627,6 +628,7 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
           {user && onOpenSidebar && (
             <button onClick={onOpenSidebar} className="p-3 bg-transparent hover:bg-blue-500/20 rounded-xl text-blue-400 hover:text-blue-300 transition-all group relative" title="Чат и Социальное">
                <MessageSquareText className="w-6 h-6 group-hover:scale-110 transition-transform" />
+               {hasUnreadMessages && <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#11141A]"></span>}
             </button>
           )}
           <button onClick={() => setActiveModal('settings')} className="p-3 bg-transparent hover:bg-bg-hover rounded-xl text-zinc-400 hover:text-white transition-all group" title="Настройки">

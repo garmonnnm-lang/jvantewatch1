@@ -270,7 +270,7 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                      <Logo />
                   </div>
                   <div className="hidden sm:block">
-                     <h1 className="text-xl font-black tracking-tighter text-blue-500 leading-none">JVANTE</h1>
+                     <h1 className="text-xl font-black tracking-tighter text-blue-500 leading-none">JvanteWatch</h1>
                      <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Anime</span>
                   </div>
                </div>

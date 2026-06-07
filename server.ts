@@ -1320,7 +1320,7 @@ async function startServer() {
       });
     });
 
-    socket.on('voice_channel_join', (channelId) => {
+    socket.on('voice_channel_join', (channelId, clientUser) => {
         if (currentVoiceChannelId) {
             socket.leave(`voice_channel_${currentVoiceChannelId}`);
             if (voiceChannels[currentVoiceChannelId] && voiceChannels[currentVoiceChannelId].users[socket.id]) {
@@ -1333,9 +1333,9 @@ async function startServer() {
         socket.join(`voice_channel_${channelId}`);
         
         if (!voiceChannels[channelId]) {
-            voiceChannels[channelId] = { id: channelId, creatorId: currentUser?.uid || socket.id, users: {} };
+            voiceChannels[channelId] = { id: channelId, creatorId: clientUser?.uid || currentUser?.uid || socket.id, users: {} };
         }
-        voiceChannels[channelId].users[socket.id] = { socketId: socket.id, uid: currentUser?.uid, username: currentUser?.username || 'Гость', avatar: currentUser?.avatar, isMicOn: false };
+        voiceChannels[channelId].users[socket.id] = { socketId: socket.id, uid: clientUser?.uid || currentUser?.uid, username: clientUser?.username || currentUser?.username || 'Гость', avatar: clientUser?.avatar || currentUser?.avatar, isCreator: clientUser?.isCreator || false, isMicOn: false };
         
         io.to(`voice_channel_${channelId}`).emit('voice_channel_state', Object.values(voiceChannels[channelId].users));
     });

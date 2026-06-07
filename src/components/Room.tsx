@@ -17,9 +17,10 @@ interface RoomProps {
   onLeave: () => void;
   isPublic?: boolean;
   onOpenSidebar?: () => void;
+  hasUnreadMessages?: boolean;
 }
 
-export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPublic = true, onOpenSidebar }: RoomProps) {
+export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPublic = true, onOpenSidebar, hasUnreadMessages }: RoomProps) {
   const [roomState, setRoomState] = useState<RoomState | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [me, setMe] = useState<User | null>(null);
@@ -269,7 +270,7 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
             <div className="w-8 h-8 rounded-lg overflow-hidden border border-border-card bg-bg-card shrink-0">
               <Logo />
             </div>
-            <div className="hidden sm:block text-xl lg:text-2xl font-black tracking-tighter text-[#3B82F6]">JVANTE</div>
+            <div className="hidden sm:block text-xl lg:text-2xl font-black tracking-tighter text-[#3B82F6]">JvanteWatch</div>
           </div>
           <div className="hidden lg:block h-4 w-[1px] bg-[#374151] shrink-0"></div>
           <div className="flex flex-col overflow-hidden flex-1 min-w-0">
@@ -286,9 +287,10 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
             <button 
                onClick={onOpenSidebar}
                title="Чат и Социальное"
-               className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border bg-blue-500 text-white border-blue-500/50 hover:bg-blue-600 transition-all shrink-0"
+               className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border bg-blue-500 text-white border-blue-500/50 hover:bg-blue-600 transition-all shrink-0"
             >
                <MessageSquareText className="w-4 h-4" />
+               {hasUnreadMessages && <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#11141A]"></span>}
             </button>
           )}
           

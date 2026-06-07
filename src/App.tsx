@@ -24,6 +24,26 @@ export default function App() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSidebarUser, setActiveSidebarUser] = useState<any>(null);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+       setHasUnreadMessages(false);
+    }
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+     if (!currentUser) return;
+     const handleNewMsg = () => {
+        if (!isSidebarOpen) setHasUnreadMessages(true);
+     };
+     socket.on('new_dm', handleNewMsg);
+     socket.on('new_group_msg', handleNewMsg);
+     return () => {
+        socket.off('new_dm', handleNewMsg);
+        socket.off('new_group_msg', handleNewMsg);
+     };
+  }, [currentUser, isSidebarOpen]);
 
   useEffect(() => {
     const handleOpenDm = (e: any) => {
@@ -175,7 +195,7 @@ export default function App() {
       ) : view === 'anime' ? (
         <AnimeHome onBack={() => setView('lobby')} user={currentUser} username={username} avatar={avatar} />
       ) : (
-        <Lobby onJoin={handleJoin} onWatchAnime={() => setView('anime')} user={currentUser} defaultUsername={username} defaultAvatar={avatar} onOpenSidebar={() => setIsSidebarOpen(true)} />
+        <Lobby onJoin={handleJoin} onWatchAnime={() => setView('anime')} user={currentUser} defaultUsername={username} defaultAvatar={avatar} onOpenSidebar={() => setIsSidebarOpen(true)} hasUnreadMessages={hasUnreadMessages} />
       )}
 
       {currentUser && (
